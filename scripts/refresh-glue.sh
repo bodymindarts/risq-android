@@ -1,11 +1,14 @@
 #!/bin/sh
-LIB_NAME="risq_glue"
-JNI_LIBS=../../app/src/main/jniLibs
+export REPO_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null && pwd )"
 
-cd rust/risq-glue
-cargo build --target aarch64-linux-android --release
-cargo build --target armv7-linux-androideabi --release
-cargo build --target i686-linux-android --release
+LIB_NAME="risq_glue"
+JNI_LIBS=${REPO_ROOT}/app/src/main/jniLibs
+
+cd ${REPO_ROOT}/rust/risq-glue
+export DOCKER_OPTS="--volume=${REPO_ROOT}/rust/risq:/risq"
+cargo build --target aarch64-linux-android
+cargo build --target armv7-linux-androideabi
+cargo build --target i686-linux-android
 
 rm -rf $JNI_LIBS
 mkdir $JNI_LIBS
