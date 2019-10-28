@@ -1,0 +1,3 @@
+[submodule "risq"]
+	path = risq
+	url = git@github.com:bodymindarts/risq.git
