@@ -7,7 +7,7 @@ use jni::JNIEnv;
 use std::ffi::{CStr, CString};
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_risq_android_MainActivity_hello(
+pub unsafe extern "C" fn Java_risq_android_risq_MainActivity_hello(
     env: JNIEnv,
     _: JObject,
     j_recipient: JString,

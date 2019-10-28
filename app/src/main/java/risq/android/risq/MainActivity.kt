@@ -10,8 +10,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        System.loadLibrary("glue")
-        Log.i("rust", hello("ashtoen"))
+        System.loadLibrary("risq_glue")
+        Log.i("rust", hello("qpdruwfpqdrufw"))
     }
 
     external fun hello(to: String): String

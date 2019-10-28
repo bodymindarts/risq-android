@@ -1,5 +1,5 @@
 [package]
-name = "rust"
+name = "risq-glue"
 version = "0.1.0"
 authors = ["Justin Carter <justin@misthos.io>"]
 edition = "2018"
@@ -14,5 +14,5 @@ jni = { version = "0.10.2", default-features = false }
 lto = true
 
 [lib]
-name = "rust"
+name = "risq_glue"
 crate-type = ["cdylib"]
