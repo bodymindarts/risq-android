@@ -7,8 +7,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# risq = { path = "../risq" }
 jni = { version = "0.10.2", default-features = false }
+
+[dependencies.risq]
+path = "../risq"
+features = ["vendored-openssl"]
 
 [profile.release]
 lto = true
