@@ -34,7 +34,7 @@ class TorService : Service() {
         installTor()
     }
 
-    private external fun startRisq(risqHome: String)
+    private external fun startRisq(risqHome: String, tc_port: Int, socks_port: Int, btc_network: String, log_level: String)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null)
@@ -50,7 +50,13 @@ class TorService : Service() {
             TOR_SERVICE_ACTION_START -> {
                 Thread {
                     startTor()
-                    startRisq(getDir("risq", Application.MODE_PRIVATE).canonicalPath.toString())
+                    startRisq(
+                        getDir("risq", Application.MODE_PRIVATE).canonicalPath.toString(),
+                        TOR_CONTROL_PORT,
+                        TOR_SOCKS_PORT,
+                        "BtcMainnet",
+                        "INFO"
+                    )
                 }.start()
             }
         }
