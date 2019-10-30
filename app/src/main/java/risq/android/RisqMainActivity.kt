@@ -10,7 +10,7 @@ class RisqMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sendIntentToService(TOR_SERVICE_ACTION_START)
+        sendIntentToService(RISQ_SERVICE_ACTION_START)
     }
 
     private fun sendIntentToService(action: String) {

@@ -8,22 +8,13 @@ import android.util.Log
 import com.jrummyapps.android.shell.Shell
 import org.torproject.android.binary.TorResourceInstaller
 import java.io.*
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeoutException
-
-const val TOR_SERVICE_ACTION_START = "risq.android.intent.action.START_TOR"
 
 class RisqDaemonService : Service() {
-    companion object {
-      init {
-        System.loadLibrary("risq_glue")
-      }
-    }
-
     private var fileTor: File? = null
     private var fileTorRc: File? = null
     private var torPidFile: File? = null
     private var appCacheHome: File? = null
+    private var daemonStarted: Boolean = false
 
     override fun onCreate() {
         super.onCreate()
@@ -33,8 +24,6 @@ class RisqDaemonService : Service() {
         torPidFile = File(appCacheHome, TOR_PID_FILE)
         installTor()
     }
-
-    private external fun startRisq(risqHome: String, tc_port: Int, socks_port: Int, btc_network: String, log_level: String)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null)
@@ -47,10 +36,10 @@ class RisqDaemonService : Service() {
 
     fun handleIntent(intent: Intent){
         when(intent.action) {
-            TOR_SERVICE_ACTION_START -> {
+            RISQ_SERVICE_ACTION_START -> if (!daemonStarted) {
                 Thread {
                     startTor()
-                    startRisq(
+                    RisqWrapper.runDaemon(
                         getDir("risq", Application.MODE_PRIVATE).canonicalPath.toString(),
                         TOR_CONTROL_PORT,
                         TOR_SOCKS_PORT,
@@ -58,6 +47,7 @@ class RisqDaemonService : Service() {
                         "INFO"
                     )
                 }.start()
+                daemonStarted = true
             }
         }
     }
