@@ -8,10 +8,14 @@ edition = "2018"
 
 [dependencies]
 jni = { version = "0.10.2", default-features = false }
+log = "0.4.8"
 
 [dependencies.risq]
 path = "../risq"
 features = ["vendored-openssl"]
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger = "0.8.5"
 
 [profile.release]
 lto = true

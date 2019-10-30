@@ -1,23 +1,47 @@
 #![cfg(target_os = "android")]
 #![allow(non_snake_case)]
 
-use jni::objects::{JObject, JString};
-use jni::sys::jstring;
-use jni::JNIEnv;
-use std::ffi::{CStr, CString};
+use android_logger::Config;
+use jni::{
+    objects::{JObject, JString},
+    sys::{jint, jstring},
+    JNIEnv,
+};
+use log::{debug, Level};
+use risq;
+use std::{
+    ffi::{CStr, CString},
+    path::PathBuf,
+};
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_risq_android_risq_MainActivity_hello(
+pub unsafe extern "C" fn Java_risq_android_TorService_startRisq(
     env: JNIEnv,
     _: JObject,
-    j_recipient: JString,
-) -> jstring {
-    let recipient = CString::from(CStr::from_ptr(
-        env.get_string(j_recipient).unwrap().as_ptr(),
-    ));
+    risq_home: JString,
+) {
+    android_logger::init_once(Config::default().with_min_level(Level::Debug));
 
-    let output = env
-        .new_string("Hello ".to_owned() + recipient.to_str().unwrap())
-        .unwrap();
-    output.into_inner()
+    let risq_home: PathBuf =
+        CString::from(CStr::from_ptr(env.get_string(risq_home).unwrap().as_ptr()))
+            .into_string()
+            .expect("get risq_home")
+            .into();
+    debug!("Starting risq daemon");
+
+    risq::run(risq::DaemonConfig {
+        api_port: 7477,
+        server_port: 5000,
+        network: risq::BaseCurrencyNetwork::BtcMainnet,
+        risq_home,
+        tor_control_port: Some(9051),
+        tor_proxy_port: Some(9050),
+        hidden_service_port: Some(9999),
+    })
 }
+
+// fn log_level(level: Cstr) {
+//     match level {
+//         "info"
+//     }
+// }

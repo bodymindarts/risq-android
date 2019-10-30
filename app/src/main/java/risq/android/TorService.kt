@@ -14,7 +14,11 @@ import java.util.concurrent.TimeoutException
 const val TOR_SERVICE_ACTION_START = "risq.android.intent.action.START_TOR"
 
 class TorService : Service() {
-    private val threads = Executors.newFixedThreadPool(3)
+    companion object {
+      init {
+        System.loadLibrary("risq_glue")
+      }
+    }
 
     private var fileTor: File? = null
     private var fileTorRc: File? = null
@@ -30,19 +34,25 @@ class TorService : Service() {
         installTor()
     }
 
+    private external fun startRisq(risqHome: String)
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null)
-            threads.execute(runnableForIntent(intent))
+            handleIntent(intent)
         else
             Log.d(LOG_TAG, "Got null onStartCommand() intent")
 
         return START_STICKY
     }
 
-    fun runnableForIntent(intent: Intent): () -> Unit {
-        return when(intent.action) {
-            TOR_SERVICE_ACTION_START -> ::startTor
-            else -> { -> Log.e(LOG_TAG,"Unknown Action") }
+    fun handleIntent(intent: Intent){
+        when(intent.action) {
+            TOR_SERVICE_ACTION_START -> {
+                Thread {
+                    startTor()
+                    startRisq(getDir("risq", Application.MODE_PRIVATE).canonicalPath.toString())
+                }.start()
+            }
         }
     }
 
@@ -114,6 +124,7 @@ class TorService : Service() {
     }
 
     fun installTor() {
+        stopTor()
         val torResourceInstaller = TorResourceInstaller(this, filesDir)
 
         fileTor = torResourceInstaller.installResources()
@@ -127,6 +138,8 @@ class TorService : Service() {
         extraLines.append("ControlPort $TOR_CONTROL_PORT\n")
         extraLines.append("SOCKSPort $TOR_SOCKS_PORT\n")
         extraLines.append("PidFile  ${torPidFile!!.canonicalPath}\n")
+        extraLines.append("DisableNetwork 0")
+
 
         val fileTorRcCustom = File(fileTorRc!!.absolutePath + ".custom")
         val success = updateTorConfigCustom(fileTorRcCustom, extraLines.toString())
@@ -151,9 +164,19 @@ class TorService : Service() {
         return torPidFile!!.readText()
     }
 
+    fun stopTor() {
+        val pid = readTorPidFile()
+        if (pid != "") {
+            try {
+                exec("kill -s 9 $pid")
+            } catch(e: java.lang.Exception) {
+
+            }
+        }
+    }
     override fun onDestroy() {
         Log.i(LOG_TAG,"Killing TOR")
-        exec("kill -s 9 ${readTorPidFile()}")
+        stopTor()
     }
 
     override fun onBind(intent: Intent): IBinder? {
