@@ -51,7 +51,8 @@ pub unsafe extern "C" fn Java_risq_android_TorService_startRisq(
     .into_string()
     .expect("get risq_home")
     .into();
-    debug!("Starting risq daemon");
+
+    info!("Starting risq daemon");
 
     risq::run(risq::DaemonConfig {
         api_port: 7477,

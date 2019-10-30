@@ -2,7 +2,6 @@ package risq.android
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 class RisqMainActivity : AppCompatActivity() {
@@ -16,7 +15,7 @@ class RisqMainActivity : AppCompatActivity() {
 
     private fun sendIntentToService(action: String) {
 
-        val torService = Intent(this, TorService::class.java)
+        val torService = Intent(this, RisqDaemonService::class.java)
         torService.setAction(action)
         startService(torService)
     }

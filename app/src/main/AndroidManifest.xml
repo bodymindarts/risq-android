@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name="risq.android.TorService"
+            android:name="risq.android.RisqDaemonService"
             android:enabled="true"
             android:exported="true"></service>
 

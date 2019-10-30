@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException
 
 const val TOR_SERVICE_ACTION_START = "risq.android.intent.action.START_TOR"
 
-class TorService : Service() {
+class RisqDaemonService : Service() {
     companion object {
       init {
         System.loadLibrary("risq_glue")
@@ -175,9 +175,7 @@ class TorService : Service() {
         if (pid != "") {
             try {
                 exec("kill -s 9 $pid")
-            } catch(e: java.lang.Exception) {
-
-            }
+            } catch(e: java.lang.Exception) {}
         }
     }
     override fun onDestroy() {
