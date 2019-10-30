@@ -16,7 +16,7 @@ use std::{
 };
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_risq_android_RisqWrapper_runDaemon(
+pub unsafe extern "C" fn Java_risq_android_RisqDaemonService_runDaemon(
     env: JNIEnv,
     _: JObject,
     j_risq_home: JString,

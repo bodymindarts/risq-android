@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.open_offer_item.view.*
 
-class OpenOfferAdapter(val offers: List<OpenOffer>) : RecyclerView.Adapter<OpenOfferAdapter.OpenOfferViewHolder>() {
+class OpenOfferAdapter() : RecyclerView.Adapter<OpenOfferAdapter.OpenOfferViewHolder>() {
+
+    var offers: List<OpenOffer> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpenOfferViewHolder {
         return OpenOfferViewHolder(

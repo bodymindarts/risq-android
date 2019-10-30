@@ -2,15 +2,19 @@ package risq.android
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class RisqMainActivity : AppCompatActivity() {
 
-    val openOffers = ArrayList<OpenOffer>()
-    val offersAdapter = OpenOfferAdapter( openOffers)
+    val mOffersAdapter = OpenOfferAdapter()
+    lateinit var mViewModel: OpenOffersViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +22,18 @@ class RisqMainActivity : AppCompatActivity() {
 
         sendIntentToService(RISQ_SERVICE_ACTION_START)
 
-        openOffers.add(OpenOffer("ashtoen","0.123","BUY"))
+        mViewModel = ViewModelProviders.of(this).get(OpenOffersViewModel::class.java)
+
         recyclerViewOpenOffers.layoutManager = LinearLayoutManager(this)
-        recyclerViewOpenOffers.adapter = offersAdapter
+        recyclerViewOpenOffers.adapter = mOffersAdapter
+        mViewModel.sells.observe(this, Observer {
+            fun onChanged(offers: List<OpenOffer>) {
+                Log.d(LOG_TAG,"ON CHANGED")
+                mOffersAdapter.offers = offers
+            }
+        })
+
+        mViewModel.marketPairFilter = "btc_eur"
     }
 
     private fun sendIntentToService(action: String) {

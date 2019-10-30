@@ -1,0 +1,16 @@
+query OpenOffers($market: MarketPair!) {
+    buysAndSells: offers(market: $market) {
+        buys {
+            ...OfferParts
+        }
+        sells {
+            ...OfferParts
+        }
+    }
+}
+
+fragment OfferParts on OpenOffer {
+    id
+    direction
+    formattedPrice
+}

@@ -39,7 +39,7 @@ class RisqDaemonService : Service() {
             RISQ_SERVICE_ACTION_START -> if (!daemonStarted) {
                 Thread {
                     startTor()
-                    RisqWrapper.runDaemon(
+                    runDaemon(
                         getDir("risq", Application.MODE_PRIVATE).canonicalPath.toString(),
                         TOR_CONTROL_PORT,
                         TOR_SOCKS_PORT,
@@ -82,7 +82,7 @@ class RisqDaemonService : Service() {
         var exitCode = -1
 
         try {
-            exitCode = exec("$torCmdString --verify-config")
+            exec("$torCmdString --verify-config")
         } catch (e: Exception) {
             Log.e(LOG_TAG,"Tor configuration did not verify: " + e.message, e)
             return false
@@ -176,5 +176,14 @@ class RisqDaemonService : Service() {
     override fun onBind(intent: Intent): IBinder? {
         Log.e(LOG_TAG, "onBind")
         return null
+    }
+
+    companion object {
+        init {
+            System.loadLibrary("risq_glue")
+        }
+
+        @JvmStatic
+        external fun runDaemon(risqHome: String, tc_port: Int, socks_port: Int, btc_network: String, log_level: String)
     }
 }
