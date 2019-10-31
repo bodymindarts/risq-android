@@ -1,0 +1,8 @@
+meta:
+  github_owner: bodymindarts
+  github_repo: risq
+  github_private_key: ((github-ssh-key.private_key))
+  github_access_token: ((github-access-token))
+  git_uri: git@github.com:bodymindarts/risq-android.git
+  git_branch: ci
+  dockerhub_org: bodymindarts
