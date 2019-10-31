@@ -22,15 +22,12 @@ class RisqMainActivity : AppCompatActivity() {
 
         sendIntentToService(RISQ_SERVICE_ACTION_START)
 
-        mViewModel = ViewModelProviders.of(this).get(OpenOffersViewModel::class.java)
-
         recyclerViewOpenOffers.layoutManager = LinearLayoutManager(this)
         recyclerViewOpenOffers.adapter = mOffersAdapter
+
+        mViewModel = ViewModelProviders.of(this).get(OpenOffersViewModel::class.java)
         mViewModel.sells.observe(this, Observer {
-            fun onChanged(offers: List<OpenOffer>) {
-                Log.d(LOG_TAG,"ON CHANGED")
-                mOffersAdapter.offers = offers
-            }
+            mOffersAdapter.offers = it
         })
 
         mViewModel.marketPairFilter = "btc_eur"

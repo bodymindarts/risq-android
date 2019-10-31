@@ -9,6 +9,10 @@ import kotlinx.android.synthetic.main.open_offer_item.view.*
 class OpenOfferAdapter() : RecyclerView.Adapter<OpenOfferAdapter.OpenOfferViewHolder>() {
 
     var offers: List<OpenOffer> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpenOfferViewHolder {
         return OpenOfferViewHolder(

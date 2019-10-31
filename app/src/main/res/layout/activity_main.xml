@@ -7,18 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".RisqMainActivity">
 
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewOpenOffers"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewOpenOffers"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"/>
 
 
 </RelativeLayout>
