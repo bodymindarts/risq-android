@@ -12,7 +12,7 @@ groups:
 - name: release
   jobs:
     - test
-  #   - rc
+    - rc
   #   - release
   #   - build-minimal
   #   - build-arm-unknown-linux-gnueabihf
@@ -132,7 +132,7 @@ jobs:
   serial: true
   plan:
   - in_parallel:
-    - { get: repo, trigger: true }
+    - { get: repo, trigger: true, params: { submodules: true }}
     - { get: pipeline-tasks }
   - in_parallel:
     - task: run-all-test
@@ -150,18 +150,18 @@ jobs:
         - path: gradle-home
         run:
           path: pipeline-tasks/ci/tasks/run-tests.sh
-# - name: rc
-#   public: true
-#   serial: true
-#   plan:
-#   - in_parallel:
-#     - get: repo
-#       trigger: true
-#       passed:
-#       - test
-#     - { get: version, params: { pre: rc } }
-#   - put: version
-#     params: { file: version/number }
+- name: rc
+  public: true
+  serial: true
+  plan:
+  - in_parallel:
+    - get: repo
+      trigger: true
+      passed:
+      - test
+    - { get: version, params: { pre: rc } }
+  - put: version
+    params: { file: version/number }
 
 # - name: release
 #   public: true

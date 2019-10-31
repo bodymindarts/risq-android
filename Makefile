@@ -1,3 +1,3 @@
 test-in-ci:
-	./gradlew cargoBuild
-	./gradlew test
+	gradle cargoBuild
+	gradle test
