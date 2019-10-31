@@ -4,8 +4,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.apollographql.android'
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -25,11 +23,22 @@ android {
     }
 }
 
+apply plugin: 'com.apollographql.android'
+
 apollo {
     generateKotlinModels = true
     customTypeMapping = [
         "MarketPair" : "kotlin.String"
     ]
+}
+
+apply plugin: 'org.mozilla.rust-android-gradle.rust-android'
+
+cargo {
+  module = "../rust/risq-glue"
+  libname = "risq_glue"
+  targets = ["arm", "x86", "arm64"]
+  profile = project.hasProperty("cargoProfile") ? project.findProperty("cargoProfile") : "debug"
 }
 
 dependencies {
