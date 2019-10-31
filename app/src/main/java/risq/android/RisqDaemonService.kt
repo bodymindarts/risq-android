@@ -21,6 +21,7 @@ class RisqDaemonService : Service() {
 
         appCacheHome =
             getDir(TOR_DATA_DIR, Application.MODE_PRIVATE)
+        appCacheHome?.mkdirs()
         torPidFile = File(appCacheHome, TOR_PID_FILE)
         installTor()
     }
@@ -134,7 +135,7 @@ class RisqDaemonService : Service() {
         extraLines.append("ControlPort $TOR_CONTROL_PORT\n")
         extraLines.append("SOCKSPort $TOR_SOCKS_PORT\n")
         extraLines.append("PidFile  ${torPidFile!!.canonicalPath}\n")
-        extraLines.append("DisableNetwork 0")
+        extraLines.append("DisableNetwork 0\n")
 
 
         val fileTorRcCustom = File(fileTorRc!!.absolutePath + ".custom")
@@ -156,13 +157,17 @@ class RisqDaemonService : Service() {
         return true
     }
 
-    fun readTorPidFile(): String {
-        return torPidFile!!.readText()
+    fun readTorPidFile(): String? {
+        try {
+            return torPidFile?.readText()
+        } catch(e: FileNotFoundException){
+            return null
+        }
     }
 
     fun stopTor() {
         val pid = readTorPidFile()
-        if (pid != "") {
+        if (pid != null) {
             try {
                 exec("kill -s 9 $pid")
             } catch(e: java.lang.Exception) {}
