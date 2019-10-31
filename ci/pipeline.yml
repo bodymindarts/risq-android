@@ -10,8 +10,8 @@ meta:
 
 groups:
 - name: release
-  # jobs:
-  #   - test
+  jobs:
+    - test
   #   - rc
   #   - release
   #   - build-minimal
@@ -127,28 +127,29 @@ jobs:
       params:
         build: pipeline-image-def/ci/ci_image
 
-# - name: test
-#   public: true
-#   serial: true
-#   plan:
-#   - in_parallel:
-#     - { get: repo, trigger: true }
-#     - { get: pipeline-tasks }
-#   - in_parallel:
-#     - task: run-all-test
-#       config:
-#         platform: linux
-#         image_resource:
-#           type: docker-image
-#           source: {repository: (( grab meta.pipeline_image ))}
-#         inputs:
-#         - name: pipeline-tasks
-#         - name: repo
-#         caches:
-#         - path: cargo-home
-#         - path: cargo-target-dir
-#         run:
-#           path: pipeline-tasks/ci/tasks/run-tests.sh
+- name: test
+  public: true
+  serial: true
+  plan:
+  - in_parallel:
+    - { get: repo, trigger: true }
+    - { get: pipeline-tasks }
+  - in_parallel:
+    - task: run-all-test
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: (( grab meta.pipeline_image ))}
+        inputs:
+        - name: pipeline-tasks
+        - name: repo
+        caches:
+        - path: cargo-home
+        - path: cargo-target-dir
+        - path: gradle-home
+        run:
+          path: pipeline-tasks/ci/tasks/run-tests.sh
 # - name: rc
 #   public: true
 #   serial: true
