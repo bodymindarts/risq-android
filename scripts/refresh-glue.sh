@@ -6,9 +6,9 @@ JNI_LIBS=${REPO_ROOT}/app/src/main/jniLibs
 
 cd ${REPO_ROOT}/rust/risq-glue
 export DOCKER_OPTS="--volume=${REPO_ROOT}/rust/risq:/risq"
-cargo build --target aarch64-linux-android
-cargo build --target armv7-linux-androideabi
-cargo build --target i686-linux-android
+cross build --target aarch64-linux-android
+cross build --target armv7-linux-androideabi
+cross build --target i686-linux-android
 
 rm -rf $JNI_LIBS
 mkdir $JNI_LIBS
