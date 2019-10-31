@@ -1,3 +1,0 @@
-[submodule "risq"]
-	path = rust/risq
-	url = git@github.com:bodymindarts/risq.git
