@@ -132,7 +132,7 @@ jobs:
   serial: true
   plan:
   - in_parallel:
-    - { get: repo, trigger: true, params: { submodules: true }}
+    - { get: repo, trigger: true }
     - { get: pipeline-tasks }
   - in_parallel:
     - task: run-all-test
