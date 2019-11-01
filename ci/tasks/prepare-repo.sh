@@ -20,7 +20,7 @@ fi
 pushd $REPO_ROOT
 
 cat <<EOF >new_change_log.md
-# [risq-android release v${VERSION}](https://github.com/bodymindarts/risq/releases/tag/v${VERSION})
+# [risq-android release v${VERSION}](https://github.com/bodymindarts/risq-android/releases/tag/v${VERSION})
 
 $(cat ci/release_notes.md)
 
