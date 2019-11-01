@@ -1,4 +1,8 @@
 build-release:
+	./gradlew cargoBuild -PcargoProfile=release
+	./gradlew assembleRelease
+
+build-release-in-ci:
 	gradle cargoBuild -PcargoProfile=release
 	gradle assembleRelease
 

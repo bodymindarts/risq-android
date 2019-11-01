@@ -19,7 +19,7 @@ keyAlias=${KEY_ALIAS}
 keyPassword=${KEY_PASSWORD}
 EOF
 
-make build-release
+make build-release-in-ci
 
 pushd rust/risq
 RISQ_REV="$(git rev-parse --short HEAD)"
