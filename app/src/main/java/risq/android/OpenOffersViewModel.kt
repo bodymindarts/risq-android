@@ -1,5 +1,6 @@
 package risq.android
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.coroutines.toDeferred
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import risq.android.graphql.OpenOffersQuery
+import java.lang.Exception
 
 class OpenOffersViewModel: ViewModel() {
     private val mApolloClient = setUpApolloClient()
@@ -37,20 +39,35 @@ class OpenOffersViewModel: ViewModel() {
     }
 
     private suspend fun refreshOffers() {
-        withContext(Dispatchers.IO) {
-            val deferred = mApolloClient.query(OpenOffersQuery(marketPairFilter)).toDeferred()
-            val response = deferred.await()
-            mBuys.postValue(response.data()?.buysAndSells?.buys?.map {
-                    val offerParts = it.fragments.offerParts
-                    OpenOffer(offerParts.id, offerParts.formattedPrice, offerParts.direction.rawValue) }
-                ?: emptyList()
 
-            )
-            mSells.postValue(response.data()?.buysAndSells?.sells?.map {
-                val offerParts = it.fragments.offerParts
-                OpenOffer(offerParts.id, offerParts.formattedPrice, offerParts.direction.rawValue) }
-                ?: emptyList()
-            )
+        withContext(Dispatchers.IO) {
+            try {
+                val deferred = mApolloClient.query(OpenOffersQuery(marketPairFilter)).toDeferred()
+                val response = deferred.await()
+                mBuys.postValue(response.data()?.buysAndSells?.buys?.map {
+                    val offerParts = it.fragments.offerParts
+                    OpenOffer(
+                        offerParts.id,
+                        offerParts.formattedPrice,
+                        offerParts.direction.rawValue
+                    )
+                }
+                    ?: emptyList()
+
+                )
+                mSells.postValue(response.data()?.buysAndSells?.sells?.map {
+                    val offerParts = it.fragments.offerParts
+                    OpenOffer(
+                        offerParts.id,
+                        offerParts.formattedPrice,
+                        offerParts.direction.rawValue
+                    )
+                }
+                    ?: emptyList()
+                )
+            } catch(e: Exception) {
+                Log.e(LOG_TAG,"Couldn't fetch open offers", e)
+            }
         }
     }
 
