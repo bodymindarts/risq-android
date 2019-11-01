@@ -4,7 +4,7 @@ meta:
   github_private_key: ((github-ssh-key.private_key))
   github_access_token: ((github-access-token))
   git_uri: git@github.com:bodymindarts/risq-android.git
-  git_branch: ci
+  git_branch: master
   dockerhub_org: bodymindarts
 
   keystore: ((keystore))
