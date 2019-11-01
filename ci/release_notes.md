@@ -1,3 +1,1 @@
-## Features
-
-- Initial POC release of risq-android
+Empty - please add release notes here
