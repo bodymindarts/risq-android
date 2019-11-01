@@ -6,6 +6,12 @@ meta:
   git_uri: (( param "Please specify the uri to the git repo" ))
   git_branch: (( param "Please specify the branch to checkout" ))
   dockerhub_org: (( param "Please specify the name of the dockerhub org" ))
+
+  keystore: (( param "Please specify the keystore in base64 encoding" ))
+  store_password: (( param "Please specify the store_password" ))
+  key_alias: (( param "Please specify the key_alias" ))
+  key_password: (( param "Please specify the key_password" ))
+
   pipeline_image: (( concat meta.dockerhub_org "/risq-android-pipeline-image" ))
 
 groups:
@@ -190,13 +196,36 @@ jobs:
       run:
         path: pipeline-tasks/ci/tasks/prepare-repo.sh
   - in_parallel:
-    - do:
-      - put: repo
+  #   - do:
+  #     - put: repo
+  #       params:
+  #         repository: prepared-repo/git
+  #         merge: true
+      # - { put: version, params: { bump: final } }
+      # - { put: version-code, params: { bump: major } }
+    - task: build-release
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: (( grab meta.pipeline_image ))}
+        inputs:
+        - name: version
+        - name: pipeline-tasks
+        - name: prepared-repo
+        caches:
+        - path: cargo-home
+        - path: cargo-target-dir
+        - path: gradle-home
+        outputs:
+        - name: release
         params:
-          repository: prepared-repo/git
-          merge: true
-      - put: version
-        params: { bump: final }
+          KEYSTORE: (( grab meta.keystore ))
+          STORE_PASSWORD: (( grab meta.store_password ))
+          KEY_ALIAS: (( grab meta.key_alias ))
+          KEY_PASSWORD: (( grab meta.key_password ))
+        run:
+          path: pipeline-tasks/ci/tasks/build-release.sh
   # - task: github-release
   #   config:
   #     image_resource:

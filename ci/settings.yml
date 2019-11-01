@@ -6,3 +6,8 @@ meta:
   git_uri: git@github.com:bodymindarts/risq-android.git
   git_branch: ci
   dockerhub_org: bodymindarts
+
+  keystore: ((keystore))
+  store_password: ((store-password))
+  key_alias: ((key-alias))
+  key_password: ((key-password))
