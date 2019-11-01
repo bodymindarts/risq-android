@@ -11,7 +11,7 @@ export GRADLE_USER_HOME="$(pwd)/gradle-home"
 
 pushd prepared-repo/git
 
-echo ${KEYSTORE} | base64 --decode -o app/risq-android.keystore
+echo ${KEYSTORE} | base64 --decode - >  app/risq-android.keystore
 cat <<EOF > ${GRADLE_USER_HOME}/gradle.properties
 storeFile=risq-android.keystore
 storePassword=${STORE_PASSWORD}
