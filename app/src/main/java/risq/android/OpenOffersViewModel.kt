@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import risq.android.graphql.AllMarketsQuery
 import risq.android.graphql.OpenOffersQuery
 import java.lang.Exception
 
@@ -21,16 +22,29 @@ class OpenOffersViewModel: ViewModel() {
     private val mSells = MutableLiveData<List<OpenOffer>>()
     val sells: LiveData<List<OpenOffer>> = mSells
 
+    private val mMarkets = MutableLiveData<List<String>>(ArrayList())
+    val markets: LiveData<List<String>> = mMarkets
+
     var marketPairFilter: String = "btc_eur"
         set(value) {
-            field = value
-            viewModelScope.launch {
-                refreshOffers()
+            if(field != value) {
+                field = value
+                mBuys.value = emptyList()
+                mSells.value = emptyList()
+                viewModelScope.launch {
+                    refreshOffers()
+                }
             }
         }
 
     init {
         viewModelScope.launch {
+            launch {
+                while(mMarkets.value?.size == 0) {
+                    fetchMarkets()
+                    delay(1000)
+                }
+            }
             while(true){
                 delay(20000)
                 refreshOffers()
@@ -38,6 +52,18 @@ class OpenOffersViewModel: ViewModel() {
         }
     }
 
+    private suspend fun fetchMarkets() {
+        withContext(Dispatchers.IO) {
+            try {
+                val deferred = mApolloClient.query(AllMarketsQuery()).toDeferred()
+                val response = deferred.await()
+                mMarkets.postValue(response.data()?.markets?.map { it.pair })
+            } catch(e: Exception) {
+                Log.e(LOG_TAG,"Couldn't fetch markets", e)
+            }
+        }
+
+    }
     private suspend fun refreshOffers() {
 
         withContext(Dispatchers.IO) {

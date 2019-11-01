@@ -1,0 +1,5 @@
+query AllMarkets {
+    markets {
+        pair
+    }
+}
