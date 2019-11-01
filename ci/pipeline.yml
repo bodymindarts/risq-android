@@ -20,12 +20,9 @@ groups:
     - test
     - rc
     - release
-  #   - build-minimal
-  #   - build-arm-unknown-linux-gnueabihf
-  #   - publish
 - name: version
   jobs:
-    # - auto-bump-patch
+    - auto-bump-patch
     - minor
     - major
 - name: images
@@ -33,35 +30,35 @@ groups:
     - build-pipeline-image
 
 jobs:
-# - name: auto-bump-patch
-#   plan:
-#   - in_parallel:
-#     - { get: repo }
-#     - { get: pipeline-tasks }
-#     - { get: version, trigger: true, params: { bump: patch, pre: rc }, passed: [release] }
-#   - in_parallel:
-#     - { put: version, params: { file: version/number } }
-#     - do:
-#       - task: set-dev-version
-#         config:
-#           image_resource:
-#             type: docker-image
-#             source: {repository: (( grab meta.pipeline_image ))}
-#           platform: linux
-#           inputs:
-#           - name: version
-#           - name: repo
-#           - name: pipeline-tasks
-#           outputs:
-#           - name: out-repo
-#           run:
-#             path: pipeline-tasks/ci/tasks/set-dev-version.sh
-#           params:
-#             BRANCH: (( grab meta.git_branch ))
-#       - put: repo
-#         params:
-#           repository: out-repo/git
-#           rebase: true
+- name: auto-bump-patch
+  plan:
+  - in_parallel:
+    - { get: repo }
+    - { get: pipeline-tasks }
+    - { get: version, trigger: true, params: { bump: patch, pre: rc }, passed: [release] }
+  - in_parallel:
+    - { put: version, params: { file: version/number } }
+    - do:
+      - task: set-dev-version
+        config:
+          image_resource:
+            type: docker-image
+            source: {repository: (( grab meta.pipeline_image ))}
+          platform: linux
+          inputs:
+          - name: version
+          - name: repo
+          - name: pipeline-tasks
+          outputs:
+          - name: out-repo
+          run:
+            path: pipeline-tasks/ci/tasks/set-dev-version.sh
+          params:
+            BRANCH: (( grab meta.git_branch ))
+      - put: repo
+        params:
+          repository: out-repo/git
+          rebase: true
 - name: minor
   public: true
   plan:
@@ -196,13 +193,13 @@ jobs:
       run:
         path: pipeline-tasks/ci/tasks/prepare-repo.sh
   - in_parallel:
-  #   - do:
-  #     - put: repo
-  #       params:
-  #         repository: prepared-repo/git
-  #         merge: true
-      # - { put: version, params: { bump: final } }
-      # - { put: version-code, params: { bump: major } }
+    - do:
+      - put: repo
+        params:
+          repository: prepared-repo/git
+          merge: true
+      - { put: version, params: { bump: final } }
+      - { put: version-code, params: { bump: major } }
     - task: build-release
       config:
         platform: linux
@@ -226,67 +223,29 @@ jobs:
           KEY_PASSWORD: (( grab meta.key_password ))
         run:
           path: pipeline-tasks/ci/tasks/build-release.sh
-  # - task: github-release
-  #   config:
-  #     image_resource:
-  #       type: docker-image
-  #       source: {repository: (( grab meta.pipeline_image ))}
-  #     platform: linux
-  #     inputs:
-  #     - name: x86_64-unknown-linux-gnu
-  #     - name: arm-unknown-linux-gnueabihf
-  #     - name: version
-  #     - name: prepared-repo
-  #     - name: pipeline-tasks
-  #     outputs:
-  #     - name: gh-release
-  #     params:
-  #       BRANCH: (( grab meta.git_branch ))
-  #     run:
-  #       path: pipeline-tasks/ci/tasks/github-release.sh
-  # - put: github-release
-  #   params:
-  #     name:   gh-release/name
-  #     tag:    gh-release/tag
-  #     body:   gh-release/notes.md
-  #     globs: [gh-release/artifacts/*]
-
-# - name: publish
-#   public: true
-#   plan:
-#   - in_parallel:
-#     - { get: repo, passed: [release] }
-#     - { get: version, passed: [release], trigger: true }
-#     - { get: pipeline-tasks }
-#   - task: publish-to-crates
-#     config:
-#       image_resource:
-#         type: docker-image
-#         source: {repository: (( grab meta.pipeline_image ))}
-#       platform: linux
-#       inputs:
-#       - name: version
-#       - name: pipeline-tasks
-#       - name: repo
-#       params:
-#         CRATES_API_TOKEN: (( grab meta.crates_api_token ))
-#       caches:
-#       - path: cargo-home
-#       - path: cargo-target-dir
-#       run:
-#         path: pipeline-tasks/ci/tasks/publish-to-crates.sh
-#   - task: verify-publish
-#     config:
-#       image_resource:
-#         type: docker-image
-#         source: {repository: (( grab meta.pipeline_image ))}
-#       platform: linux
-#       inputs:
-#       - name: version
-#       - name: pipeline-tasks
-#       run:
-#         path: pipeline-tasks/ci/tasks/verify-publish.sh
-
+  - task: github-release
+    config:
+      image_resource:
+        type: docker-image
+        source: {repository: (( grab meta.pipeline_image ))}
+      platform: linux
+      inputs:
+      - name: release
+      - name: version
+      - name: prepared-repo
+      - name: pipeline-tasks
+      outputs:
+      - name: gh-release
+      params:
+        BRANCH: (( grab meta.git_branch ))
+      run:
+        path: pipeline-tasks/ci/tasks/github-release.sh
+  - put: github-release
+    params:
+      name:   gh-release/name
+      tag:    gh-release/tag
+      body:   gh-release/notes.md
+      globs: [gh-release/artifacts/*]
 
 resources:
 - name: repo
@@ -336,9 +295,9 @@ resources:
     branch: version
     file: version-code
     initial_version: "1.0.0"
-# - name: github-release
-#   type: github-release
-#   source:
-#     user:         (( grab meta.github_owner ))
-#     repository:   (( grab meta.github_repo ))
-#     access_token: (( grab meta.github_access_token ))
+- name: github-release
+  type: github-release
+  source:
+    user:         (( grab meta.github_owner ))
+    repository:   (( grab meta.github_repo ))
+    access_token: (( grab meta.github_access_token ))
