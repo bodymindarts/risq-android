@@ -193,13 +193,13 @@ jobs:
       run:
         path: pipeline-tasks/ci/tasks/prepare-repo.sh
   - in_parallel:
-  #   - do:
-  #     - put: repo
-  #       params:
-  #         repository: prepared-repo/git
-  #         merge: true
-      # - { put: version, params: { bump: final } }
-      # - { put: version-code, params: { bump: major } }
+    - do:
+      - put: repo
+        params:
+          repository: prepared-repo/git
+          merge: true
+      - { put: version, params: { bump: final } }
+      - { put: version-code, params: { bump: major } }
     - task: build-release
       config:
         platform: linux
