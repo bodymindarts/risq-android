@@ -1,1 +1,2 @@
-Empty - please add release notes here
+## Improvements
+- publish debug apk on release
