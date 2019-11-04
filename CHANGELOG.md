@@ -1,3 +1,9 @@
+# [risq-android release v0.1.2](https://github.com/bodymindarts/risq-android/releases/tag/v0.1.2)
+
+## Bug Fixes
+
+- trying to get risq_glue into the apk in pipeline
+
 # [risq-android release v0.1.1](https://github.com/bodymindarts/risq-android/releases/tag/v0.1.1)
 
 ## Improvements
