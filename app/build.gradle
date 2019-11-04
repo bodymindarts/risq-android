@@ -11,8 +11,8 @@ android {
     applicationId "risq.android"
       minSdkVersion 26
       targetSdkVersion 29
-      versionCode 4
-      versionName "0.1.2-dev"
+      versionCode 5
+      versionName "0.1.2"
       testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
   if(project.hasProperty("storeFile")) {

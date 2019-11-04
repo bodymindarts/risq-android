@@ -1,3 +1,1 @@
-## Bug Fixes
-
-- trying to get risq_glue into the apk in pipeline
+Empty - please add release notes here
