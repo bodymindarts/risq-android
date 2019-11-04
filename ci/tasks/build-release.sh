@@ -5,8 +5,6 @@ set -eu
 VERSION="$(cat version/number)"
 OUT="$(pwd)/release"
 
-export CARGO_HOME="$(pwd)/cargo-home"
-export CARGO_TARGET_DIR="$(pwd)/cargo-target-dir"
 export GRADLE_USER_HOME="$(pwd)/gradle-home"
 
 pushd prepared-repo/git
@@ -25,7 +23,7 @@ pushd rust/risq
 RISQ_REV="$(git rev-parse --short HEAD)"
 popd
 
-mv app/build/outputs/apk/release/app-release.apk ${OUT}/risq-${RISQ_REV}-android-${VERSION}.apk
+# mv app/build/outputs/apk/release/app-release.apk ${OUT}/risq-${RISQ_REV}-android-${VERSION}.apk
 
 gradle cargoBuild
 gradle assemble
