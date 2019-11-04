@@ -1,3 +1,7 @@
+build-debug-release:
+	./gradlew cargoBuild
+	./gradlew assemble
+
 build-release:
 	./gradlew cargoBuild -PcargoProfile=release
 	./gradlew assembleRelease

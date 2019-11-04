@@ -26,3 +26,8 @@ RISQ_REV="$(git rev-parse --short HEAD)"
 popd
 
 mv app/build/outputs/apk/release/app-release.apk ${OUT}/risq-${RISQ_REV}-android-${VERSION}.apk
+
+gradle cargoBuild
+gradle assemble
+
+mv app/build/outputs/apk/debug/app-debug.apk ${OUT}/debug-risq-${RISQ_REV}-android-${VERSION}.apk

@@ -9,7 +9,7 @@ android {
   buildToolsVersion "29.0.2"
   defaultConfig {
     applicationId "risq.android"
-      minSdkVersion 26
+      minSdkVersion 16
       targetSdkVersion 29
       versionCode 3
       versionName "0.1.1-dev"
