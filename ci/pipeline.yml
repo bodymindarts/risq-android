@@ -211,8 +211,6 @@ jobs:
         - name: pipeline-tasks
         - name: prepared-repo
         caches:
-        - path: cargo-home
-        - path: cargo-target-dir
         - path: gradle-home
         outputs:
         - name: release
