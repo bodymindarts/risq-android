@@ -1,1 +1,3 @@
-Empty - please add release notes here
+## Improvements
+
+- Update risq to v0.3.2
