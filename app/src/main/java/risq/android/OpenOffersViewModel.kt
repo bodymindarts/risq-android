@@ -70,23 +70,23 @@ class OpenOffersViewModel: ViewModel() {
             try {
                 val deferred = mApolloClient.query(OpenOffersQuery(marketPairFilter)).toDeferred()
                 val response = deferred.await()
-                mBuys.postValue(response.data()?.buysAndSells?.buys?.map {
+                mSells.postValue(response.data()?.buysAndSells?.buys?.map {
                     val offerParts = it.fragments.offerParts
                     OpenOffer(
                         offerParts.id,
                         offerParts.formattedPrice,
-                        offerParts.direction.rawValue
+                        "SELL"
                     )
                 }
                     ?: emptyList()
 
                 )
-                mSells.postValue(response.data()?.buysAndSells?.sells?.map {
+                mBuys.postValue(response.data()?.buysAndSells?.sells?.map {
                     val offerParts = it.fragments.offerParts
                     OpenOffer(
                         offerParts.id,
                         offerParts.formattedPrice,
-                        offerParts.direction.rawValue
+                        "BUY"
                     )
                 }
                     ?: emptyList()

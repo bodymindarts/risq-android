@@ -11,6 +11,5 @@ query OpenOffers($market: MarketPair!) {
 
 fragment OfferParts on OpenOffer {
     id
-    direction
     formattedPrice
 }

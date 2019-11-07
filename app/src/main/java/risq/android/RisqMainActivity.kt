@@ -45,7 +45,10 @@ class RisqMainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
         mViewModel = ViewModelProviders.of(this).get(OpenOffersViewModel::class.java)
         mViewModel.sells.observe(this, Observer {
-            mOffersAdapter.offers = it
+            mOffersAdapter.sells = it
+        })
+        mViewModel.buys.observe(this, Observer {
+            mOffersAdapter.buys = it
         })
         mViewModel.markets.observe(this, Observer {
             Log.i(LOG_TAG,"UPDATING MARKETS")
