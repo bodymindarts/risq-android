@@ -1,3 +1,8 @@
+# [risq-android release v0.1.4](https://github.com/bodymindarts/risq-android/releases/tag/v0.1.4)
+
+## Improvements
+- add volume @ price to offer display
+
 # [risq-android release v0.1.3](https://github.com/bodymindarts/risq-android/releases/tag/v0.1.3)
 
 ## Improvements
