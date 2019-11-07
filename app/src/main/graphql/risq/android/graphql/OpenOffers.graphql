@@ -1,9 +1,9 @@
 query OpenOffers($market: MarketPair!) {
     buysAndSells: offers(market: $market) {
-        buys {
+        buys: btcBuys {
             ...OfferParts
         }
-        sells {
+        sells: btcSells {
             ...OfferParts
         }
     }

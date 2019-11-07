@@ -1,1 +1,2 @@
-Empty - please add release notes here
+## Improvements
+- add volume @ price to offer display
