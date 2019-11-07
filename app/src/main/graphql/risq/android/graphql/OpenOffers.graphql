@@ -12,4 +12,5 @@ query OpenOffers($market: MarketPair!) {
 fragment OfferParts on OpenOffer {
     id
     formattedPrice
+    formattedAmount: formattedBtcAmount
 }

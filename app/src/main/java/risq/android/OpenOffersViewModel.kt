@@ -75,7 +75,8 @@ class OpenOffersViewModel: ViewModel() {
                     OpenOffer(
                         offerParts.id,
                         offerParts.formattedPrice,
-                        "SELL"
+                        "SELL",
+                         offerParts.formattedAmount
                     )
                 }
                     ?: emptyList()
@@ -86,7 +87,8 @@ class OpenOffersViewModel: ViewModel() {
                     OpenOffer(
                         offerParts.id,
                         offerParts.formattedPrice,
-                        "BUY"
+                        "BUY",
+                         offerParts.formattedAmount
                     )
                 }
                     ?: emptyList()
