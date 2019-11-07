@@ -33,7 +33,7 @@ class OpenOfferAdapter() : RecyclerView.Adapter<OpenOfferAdapter.OpenOfferViewHo
             val offer = sells.get(position)
 
             holder.view.sellDirection.text = offer.direction
-            holder.view.sellPrice.text = offer.formattedAmount + " @ " + offer.formattedPrice
+            holder.view.sellPrice.text = offer.formattedAmount + " @\n" + offer.formattedPrice
         } else {
             holder.view.sellDirection.text = ""
             holder.view.sellPrice.text = ""
@@ -42,7 +42,7 @@ class OpenOfferAdapter() : RecyclerView.Adapter<OpenOfferAdapter.OpenOfferViewHo
             val offer = buys.get(position)
 
             holder.view.buyDirection.text = offer.direction
-            holder.view.buyPrice.text = offer.formattedAmount + " @ " + offer.formattedPrice
+            holder.view.buyPrice.text = offer.formattedAmount + " @\n" + offer.formattedPrice
         } else {
             holder.view.buyDirection.text = ""
             holder.view.buyPrice.text = ""
