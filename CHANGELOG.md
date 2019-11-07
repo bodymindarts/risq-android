@@ -1,3 +1,9 @@
+# [risq-android release v0.1.3](https://github.com/bodymindarts/risq-android/releases/tag/v0.1.3)
+
+## Improvements
+
+- Update risq to v0.3.2
+
 # [risq-android release v0.1.2](https://github.com/bodymindarts/risq-android/releases/tag/v0.1.2)
 
 ## Bug Fixes
