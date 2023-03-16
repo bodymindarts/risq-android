@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 jni = { version = "0.10.2", default-features = false }
-log = "0.4.8"
+log = "0.4.17"
 
 [dependencies.risq]
 path = "../risq"
